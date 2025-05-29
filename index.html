@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirRibx - Earn Ribs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Стартовая страница */
+        .start-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+        }
+        
+        .start-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .login-btn {
+            padding: 12px 30px;
+            background-color: white;
+            color: #6e8efb;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Модальное окно регистрации/входа */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #6e8efb;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .switch-form span {
+            color: #6e8efb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Главная страница */
+        .main-page {
+            display: none;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6e8efb;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ribs-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #5a7df5;
+            transform: translateX(5px);
+        }
+        
+        .earn-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .earn-btn {
+            padding: 15px 30px;
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .earn-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Стартовая страница -->
+    <div class="start-page" id="startPage">
+        <img src="https://via.placeholder.com/200" alt="Welcome" class="start-image" id="startImage">
+        <div class="logo">VirRibx</div>
+        <button class="login-btn" id="loginBtn">Login</button>
+    </div>
+    
+    <!-- Модальное окно регистрации -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-title">Create Account</div>
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Enter your username">
+                <div class="error-message" id="usernameError">Username is already taken</div>
+            </div>
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="registerBtn">Register</button>
+            <div class="switch-form">
+                Already have an account? <span id="switchToLogin">Login</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно входа -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-title">Login</div>
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password">
+            </div>
+            <button class="submit-btn" id="loginSubmitBtn">Login</button>
+            <div class="switch-form">
+                Don't have an account? <span id="switchToRegister">Register</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Главная страница -->
+    <div class="main-page" id="mainPage">
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="ribs-count"><span id="userRibs">0</span> ribs</div>
+            </div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item">Virbux</div>
+            <div class="nav-item">Reviews</div>
+            <div class="nav-item">Privacy Policy</div>
+            <div class="nav-item">Users</div>
+            <div class="nav-item">Channel</div>
+        </div>
+        
+        <div class="earn-section">
+            <button class="earn-btn">Earn ribs</button>
+        </div>
+    </div>
+    
+    <script>
+        // Данные пользователей (в реальном приложении это должно быть на сервере)
+        const users = {};
+        
+        // Элементы DOM
+        const startPage = document.getElementById('startPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const mainPage = document.getElementById('mainPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const usernameError = document.getElementById('usernameError');
+        const loginError = document.getElementById('loginError');
+        const userAvatar = document.getElementById('userAvatar');
+        const userRibs = document.getElementById('userRibs');
+        
+        // Показать модальное окно входа
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        // Переключение между регистрацией и входом
+        switchToLogin.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        switchToRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+            clearErrors();
+        });
+        
+        // Регистрация нового пользователя
+        registerBtn.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка на занятость имени
+            if (users[username]) {
+                usernameError.style.display = 'block';
+                return;
+            }
+            
+            // Регистрация пользователя
+            users[username] = {
+                password: password,
+                ribs: 0
+            };
+            
+            // Вход после регистрации
+            loginUser(username);
+        });
+        
+        // Вход пользователя
+        loginSubmitBtn.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
+            
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Проверка учетных данных
+            if (users[username] && users[username].password === password) {
+                loginUser(username);
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Функция входа пользователя
+        function loginUser(username) {
+            // Закрыть все модальные окна
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            startPage.style.display = 'none';
+            
+            // Показать главную страницу
+            mainPage.style.display = 'block';
+            
+            // Установить данные пользователя
+            userAvatar.textContent = username.charAt(0).toUpperCase();
+            userRibs.textContent = users[username].ribs;
+            
+            // Очистить поля ввода
+            regUsername.value = '';
+            regPassword.value = '';
+            loginUsername.value = '';
+            loginPassword.value = '';
+            clearErrors();
+        }
+        
+        // Очистка сообщений об ошибках
+        function clearErrors() {
+            usernameError.style.display = 'none';
+            loginError.style.display = 'none';
+        }
+        
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (event) => {
+            if (event.target === registerModal) {
+                registerModal.style.display = 'none';
+                clearErrors();
+            }
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+                clearErrors();
+            }
+        });
+    </script>
+</body>
+</html>
